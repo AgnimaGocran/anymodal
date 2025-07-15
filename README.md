@@ -38,6 +38,7 @@ export default modals.create('view-article', ({ modal: { articleId } }) => {
     >
         Your content of the view-article modal of article #{articleId} 
     </ReactModal>;
+});
 ```
 
 ## Modals loader
