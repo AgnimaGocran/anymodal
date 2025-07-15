@@ -17,9 +17,9 @@ Set up the modal manager anywhere in your project (for example, in `@/modals/mod
 import anyModal from 'any-modal';
 
 const modals = anyModal<
-	| { type: 'view-article', articleId: number }
-	| { type: 'new-article', categoryId: number }
-	| { type: 'another-modal', param1: string, param2: number, param3: number[] }
+    | { type: 'view-article', articleId: number }
+    | { type: 'new-article', categoryId: number }
+    | { type: 'another-modal', param1: string, param2: number, param3: number[] }
 >();
 
 export default modals;
@@ -31,13 +31,13 @@ Create modal `@/modals/view-article.ts` (use modal component from any library, e
 
 ```ts
 export default modals.create('view-article', ({ modal: { articleId } }) => {
-	return <ReactModal
-		onRequestClose={() => modals.prev()}
-		shouldCloseOnEsc={true}
-		isOpen={true} // Modal renders only when invoked, so no need to manage this manually
-	>
-		Your content of the view-article modal of article #{articleId} 
-	</ReactModal>;
+    return <ReactModal
+        onRequestClose={() => modals.prev()}
+        shouldCloseOnEsc={true}
+        isOpen={true} // Modal renders only when invoked, so no need to manage this manually
+    >
+        Your content of the view-article modal of article #{articleId} 
+    </ReactModal>;
 ```
 
 ## Modals loader
@@ -54,16 +54,16 @@ import { useEffect } from 'react';
 import ReactModal from 'react-modal';
 
 export default function ModalsLoader() {
-	useEffect(() => {
-		ReactModal.setAppElement('#modal-root');
-	}, []);
+    useEffect(() => {
+        ReactModal.setAppElement('#modal-root');
+    }, []);
 
-	return <>
-		<ViewArticle/>
-		<NewArticle/>
-		<AnotherModal/>
-		<div id="modal-root"></div>
-	</>;
+    return <>
+        <ViewArticle/>
+        <NewArticle/>
+        <AnotherModal/>
+        <div id="modal-root"></div>
+    </>;
 }
 ```
 
@@ -75,16 +75,16 @@ In any component or page:
 import modals from '@modals/modals';
 
 export default MyPageComponent() {
-	return <div>
-		<button onClick={() => modals.show({ type: 'view-article', articleId: 15 })}>
-			View article
-		</button>
-		<button onClick={() => modals.show({ type: 'new-article', categoryId: 6 })}>
-			New article
-		</button>
-		<button onClick={() => modals.show({ type: 'another-modal', param1: 'param1', param2: 2, param3: [3, 2, 1] })}>
-			Another modal
-		</button>
-	</div>;
+    return <div>
+        <button onClick={() => modals.show({ type: 'view-article', articleId: 15 })}>
+            View article
+        </button>
+        <button onClick={() => modals.show({ type: 'new-article', categoryId: 6 })}>
+            New article
+        </button>
+        <button onClick={() => modals.show({ type: 'another-modal', param1: 'param1', param2: 2, param3: [3, 2, 1] })}>
+            Another modal
+        </button>
+    </div>;
 }
 ```
