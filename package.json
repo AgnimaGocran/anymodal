@@ -1,0 +1,23 @@
+{
+  "name": "anymodal",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.tsx",
+  "module": "src/index.tsx",
+  "types": "src/index.ts",
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  },
+  "files": [
+    "src/index.tsx",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "react": "^19",
+    "valtio": "^2.1.5",
+    "@siberiacancode/reactuse": "^0.2.15"
+  },
+  "author": "AgnimaGocran",
+  "license": "MIT"
+}
