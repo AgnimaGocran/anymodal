@@ -1,16 +1,24 @@
 {
   "name": "anymodal",
   "version": "0.1.0",
+  "description": "Centralized modal manager with strict typing for React.",
   "type": "module",
-  "main": "src/index.tsx",
-  "module": "src/index.tsx",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
   "devDependencies": {
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
   },
   "files": [
-    "src/index.tsx",
+    "dist",
+    "LICENSE",
     "README.md"
   ],
   "peerDependencies": {

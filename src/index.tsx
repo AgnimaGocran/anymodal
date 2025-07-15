@@ -7,12 +7,10 @@ export default function anyModal<AnyModals extends { type: string }>(
 	loaderNode: (modal: AnyModals) => ReactNode | null = () => null,
 	errorNode: (error: Error) => ReactNode | null = () => null
 ) {
-	interface AnyModalsState {
+	const modalsState = proxy<{
 		modal: AnyModals | null;
 		modalsStack: AnyModals[];
-	}
-
-	const modalsState = proxy<AnyModalsState>({
+	}>({
 		modal: null,
 		modalsStack: [],
 	});
@@ -56,8 +54,8 @@ export default function anyModal<AnyModals extends { type: string }>(
 	) {
 		return function Wrapper() {
 			return <Modal
-			type={type}
-			render={(modal) => <Body modal={modal} />}
+				type={type}
+				render={(modal) => <Body modal={modal} />}
 			/>;
 		};
 	}
@@ -105,8 +103,8 @@ export default function anyModal<AnyModals extends { type: string }>(
 
 		return function Wrapper() {
 			return <Modal
-			type={kind}
-			render={(modal) => <ModalContent modal={modal} />}
+				type={kind}
+				render={(modal) => <ModalContent modal={modal} />}
 			/>;
 		};
 	}
