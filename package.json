@@ -1,6 +1,6 @@
 {
-  "name": "anymodal",
-  "version": "0.1.1",
+  "name": "anymodal-ts",
+  "version": "0.1.2",
   "description": "Centralized modal manager with strict typing for React.",
   "type": "module",
   "main": "dist/index.js",
@@ -27,5 +27,6 @@
     "@siberiacancode/reactuse": "^0.2.15"
   },
   "author": "AgnimaGocran",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": ["react", "typescript", "modals"]
 }

@@ -1,12 +1,12 @@
 # AnyModal
 
-This library allows you to centrally manage modal windows with strict typing. You can pass any typed data to a modal window.
+This library allows you to centrally manage modal windows with strict typing in your React app. You can pass any typed data to a modal window.
 
 ## Installation
 
 ```bash
-bun add AgnimaGocran/anymodal
-yarn add AgnimaGocran/anymodal
+bun add anymodal-ts
+yarn add anymodal-ts
 ```
 
 ## Setup
@@ -14,7 +14,7 @@ yarn add AgnimaGocran/anymodal
 Set up the modal manager anywhere in your project (for example, in `@/modals/modals.ts`):
 
 ```ts
-import anyModal from 'any-modal';
+import anyModal from 'any-modal-ts';
 
 const modals = anyModal<
     | { type: 'view-article', articleId: number }
