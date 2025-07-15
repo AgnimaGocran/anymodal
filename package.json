@@ -1,6 +1,6 @@
 {
   "name": "anymodal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Centralized modal manager with strict typing for React.",
   "type": "module",
   "main": "dist/index.js",
