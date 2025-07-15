@@ -1,6 +1,6 @@
 {
   "name": "anymodal-ts",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Centralized modal manager with strict typing for React.",
   "type": "module",
   "main": "dist/index.js",

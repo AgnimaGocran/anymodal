@@ -14,7 +14,7 @@ yarn add anymodal-ts
 Set up the modal manager anywhere in your project (for example, in `@/modals/modals.ts`):
 
 ```ts
-import anyModal from 'any-modal-ts';
+import anyModal from 'anymodal-ts';
 
 const modals = anyModal<
     | { type: 'view-article', articleId: number }
