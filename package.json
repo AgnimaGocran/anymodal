@@ -8,8 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
-    "postinstall": "tsc"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@types/react": "^19",
