@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useSnapshot } from 'valtio/react';
 import { useAsync } from '@siberiacancode/reactuse';
-import { proxy } from 'valtio';
+import { proxy, ref } from 'valtio';
 export default function anyModal(loaderNode = () => null, errorNode = () => null) {
     const modalsState = proxy({
         modal: null,
@@ -11,7 +11,7 @@ export default function anyModal(loaderNode = () => null, errorNode = () => null
         if (modalsState.modal) {
             modalsState.modalsStack.push(modalsState.modal);
         }
-        modalsState.modal = modal;
+        modalsState.modal = ref(modal);
     }
     function prev() {
         modalsState.modal = modalsState.modalsStack.pop() || null;

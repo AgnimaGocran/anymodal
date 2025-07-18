@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useSnapshot } from 'valtio/react';
 import { useAsync } from '@siberiacancode/reactuse';
-import { proxy } from 'valtio';
+import { proxy, ref } from 'valtio';
 
 export default function anyModal<AnyModals extends { type: string }>(
 	loaderNode: (modal: AnyModals) => ReactNode | null = () => null,
@@ -26,7 +26,7 @@ export default function anyModal<AnyModals extends { type: string }>(
 		if (modalsState.modal) {
 			modalsState.modalsStack.push(modalsState.modal);
 		}
-		modalsState.modal = modal;
+		modalsState.modal = ref(modal);
 	}
 
 	function prev() {
@@ -64,20 +64,20 @@ export default function anyModal<AnyModals extends { type: string }>(
 	type ModalOf<K extends ModalType> = Extract<AnyModals, { type: K }>;
 
 	type Result<F> =
-	F extends readonly (infer P)[]
-	? { [I in keyof F]: Awaited<F[I]> }
-	: never;
+		F extends readonly (infer P)[]
+		? { [I in keyof F]: Awaited<F[I]> }
+		: never;
 
 	function createWithFetch<
-	K extends ModalType,
-	F
+		K extends ModalType,
+		F
 	>(
 		kind: K,
 		fetchersFn: (m: ModalOf<K>) => F,
-	  Body: React.FC<{
-		  modal: ModalOf<K>;
-		  data: Result<F>;
-	  }>
+		Body: React.FC<{
+			modal: ModalOf<K>;
+			data: Result<F>;
+		}>
 	) {
 		function ModalContent({ modal }: { modal: ModalOf<K> }) {
 			const { isLoading, data, error } = useAsync<Result<F>>(
