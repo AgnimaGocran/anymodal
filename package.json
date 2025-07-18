@@ -1,6 +1,6 @@
 {
   "name": "anymodal-ts",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Centralized modal manager with strict typing for React.",
   "repository": {
     "type": "git",
@@ -15,9 +15,6 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.3.0",
-    "@types/bun": "^1.2.18",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tsup": "^8.5.0",

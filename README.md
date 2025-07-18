@@ -89,3 +89,27 @@ export default MyPageComponent() {
     </div>;
 }
 ```
+
+
+## Create with fetching data
+
+```ts
+async function fetchMyArticle(articleId: number) {
+    return { title: `Very good article ${articleId}` };
+}
+
+export default modals.createWithFetch(
+    'view-article',
+    ({ articleId }) => [fetchMyArticle(articleId)] as const,
+    ({ modal: { articleId }, data: [article] }) => { // articleId and article object are fully typed
+        return <ReactModal
+                onRequestClose={() => modals.prev()}
+                shouldCloseOnEsc={true}
+                isOpen={true} // Modal renders only when invoked, so no need to manage this manually
+            >
+                Your content of the view-article modal of article #{articleId},
+                article's title is {article.title}
+        </ReactModal>;
+    }
+);
+```
