@@ -13,5 +13,12 @@
     "rootDir": "src",
     "declaration": true
   },
-  "exclude": ["dist", "examples", "node_modules"]
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "examples",
+    "node_modules",
+    "src/**/*.test.tsx",
+    "src/test-setup.ts"
+  ]
 }

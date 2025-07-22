@@ -11,105 +11,159 @@ yarn add anymodal-ts
 
 ## Setup
 
-Set up the modal manager anywhere in your project (for example, in `@/modals/modals.ts`):
+**Initialize the modal manager:**
+
+Create a file, for example, in `@/lib/modals.ts`, and define all your possible modals:
 
 ```ts
 import anyModal from 'anymodal-ts';
 
 const modals = anyModal<
-    | { type: 'view-article', articleId: number }
-    | { type: 'new-article', categoryId: number }
-    | { type: 'another-modal', param1: string, param2: number, param3: number[] }
+  | { type: 'view-article'; articleId: number }
+  | { type: 'new-article'; categoryId: number }
+  | {
+      type: 'another-modal';
+      param1: string;
+      param2: number;
+      param3: number[];
+    }
 >();
 
 export default modals;
 ```
 
-## Create a modals
+**Add `ModalContainer` and register modals:**
 
-Create modal `@/modals/view-article.ts` (use modal component from any library, example with ReactModal):
+Place the `ModalContainer` component in the root of your application (e.g., in `layout.tsx`) and import the registry file.
 
-```ts
-export default modals.create('view-article', ({ modal: { articleId } }) => {
-    return <ReactModal
-        onRequestClose={() => modals.prev()}
-        shouldCloseOnEsc={true}
-        isOpen={true} // Modal renders only when invoked, so no need to manage this manually
-    >
-        Your content of the view-article modal of article #{articleId} 
-    </ReactModal>;
-});
+```tsx
+// layout.tsx
+import modals from '@/lib/modals';
+import '@/components/modals/registry'; // Import to register all modals
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <html>
+    <body>
+      {children}
+      <modals.ModalContainer />
+    </body>
+  </html>
+}
 ```
 
-## Modals loader
+## Creating Modals
 
-Create a loader file, such as `@/modals/loader.ts`, to register your modals and configure the modal library (make sure to invoke this component in your layout or app root):
+Create a component for each modal.
 
-```ts
-'use client';
+**Example for `view-article`:**
 
-import ViewArticle from '@/modals/view-article';
-import NewArticle from '@/modals/new-article';
-import AnotherModal from '@/modals/another-modal';
-import { useEffect } from 'react';
+```tsx
+// @/components/modals/view-article.tsx
+import modals from '@/lib/modals';
 import ReactModal from 'react-modal';
 
-export default function ModalsLoader() {
-    useEffect(() => {
-        ReactModal.setAppElement('#modal-root');
-    }, []);
+export default modals.create(
+  'view-article',
+  ({ modal: { articleId } }) => <ReactModal
+    isOpen={true}
+    onRequestClose={() => modals.prev()}
+  >
+    <h2>Article #{articleId}</h2>
+    <p>This is the content of the article.</p>
+    <button onClick={() => modals.close()}>
+      Close All Modals
+    </button>
+  </ReactModal>
+);
+```
 
-    return <>
-        <ViewArticle/>
-        <NewArticle/>
-        <AnotherModal/>
-        <div id="modal-root"></div>
-    </>;
-}
+**Register your modals:**
+
+Create a "registry" file that simply imports all your modal components. This ensures that they are registered when the app starts.
+
+```tsx
+// @/components/modals/registry.tsx
+import './view-article';
+import './new-article';
+// ... import all other modals
 ```
 
 ## Usage
 
-In any component or page:
+You can now call your modals from any component.
 
-```ts
-import modals from '@modals/modals';
+```tsx
+import modals from '@/lib/modals';
 
-export default MyPageComponent() {
-    return <div>
-        <button onClick={() => modals.show({ type: 'view-article', articleId: 15 })}>
-            View article
-        </button>
-        <button onClick={() => modals.show({ type: 'new-article', categoryId: 6 })}>
-            New article
-        </button>
-        <button onClick={() => modals.show({ type: 'another-modal', param1: 'param1', param2: 2, param3: [3, 2, 1] })}>
-            Another modal
-        </button>
-    </div>;
+export default function MyPageComponent() {
+  return <div>
+    <button
+      onClick={() =>
+        modals.show({
+          type: 'view-article',
+          articleId: 15,
+        })
+      }
+    >
+      View article
+    </button>
+    <button
+      onClick={() =>
+        modals.show({
+          type: 'new-article',
+          categoryId: 6,
+        })
+      }
+    >
+      New article
+    </button>
+  </div>
 }
 ```
 
+## API Reference
 
-## Create with fetching data
+The `anyModal` instance returns the following methods:
+
+* `show(modal)`: Opens a new modal. If another modal is already open, it's added to a stack.
+* `prev()`: Closes the current modal and opens the previous one from the stack. Ideal for "Back" buttons or closing with the `Esc` key.
+* `close()`: Closes all modals and clears the stack. Use this for "Close" buttons (like a cross icon) or for actions that should exit the entire modal flow.
+* `create(type, Component)`: Registers a component for a specific modal type.
+* `createWithFetch(type, fetcher, Component)`: Registers a component that needs to fetch data before rendering.
+
+## Fetching Data
+
+You can use `createWithFetch` to create modals that load data from an API.
 
 ```ts
+// @/components/modals/view-article-with-fetch.tsx
+import modals from '@/lib/modals';
+import ReactModal from 'react-modal';
+
 async function fetchMyArticle(articleId: number) {
-    return { title: `Very good article ${articleId}` };
+  const response = await fetch(
+    `https://api.example.com/articles/${articleId}`
+  );
+  return response.json();
 }
 
 export default modals.createWithFetch(
-    'view-article',
-    ({ articleId }) => [fetchMyArticle(articleId)] as const,
-    ({ modal: { articleId }, data: [article] }) => { // articleId and article object are fully typed
-        return <ReactModal
-                onRequestClose={() => modals.prev()}
-                shouldCloseOnEsc={true}
-                isOpen={true} // Modal renders only when invoked, so no need to manage this manually
-            >
-                Your content of the view-article modal of article #{articleId},
-                article's title is {article.title}
-        </ReactModal>;
-    }
+  'view-article',
+  ({ articleId }) => fetchMyArticle(articleId),
+  ({
+    modal: { articleId },
+    data: article,
+  }) => <ReactModal
+    isOpen={true}
+    onRequestClose={() => modals.prev()}
+  >
+    <h2>
+      {article.title} (Article #{articleId})
+    </h2>
+    <p>{article.content}</p>
+  </ReactModal>
 );
-```
