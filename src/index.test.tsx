@@ -94,12 +94,12 @@ describe('anyModal with React Testing Library', () => {
 					({ userId }) => mockApi.getUser(userId),
 					({ userId }) => mockApi.getPosts(userId),
 				] as const,
-				({ data: [user, posts], update, updateAll }) => (
+				({ data: [user, posts], update: [updateUser, updatePosts], updateAll }) => (
 					<div>
 						<h1>{user.name}</h1>
 						<p>Posts: {posts.length}</p>
-						<button onClick={update[0]}>Update User</button>
-						<button onClick={update[1]}>Update Posts</button>
+						<button onClick={updateUser}>Update User</button>
+						<button onClick={updatePosts}>Update Posts</button>
 						<button onClick={updateAll}>Update All</button>
 					</div>
 				)

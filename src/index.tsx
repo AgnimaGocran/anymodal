@@ -16,6 +16,10 @@ type TDataArray<F extends TFetcherFns<any>> = {
 	-readonly [I in keyof F]: Awaited<ReturnType<F[I]>>;
 };
 
+type TUpdateFns<F extends TFetcherFns<any>> = {
+    -readonly [I in keyof F]: () => Promise<void>;
+};
+
 function useMultiAsync<M, F extends TFetcherFns<M>>(
 	fetchers: F,
 	modal: M
@@ -39,7 +43,7 @@ function useMultiAsync<M, F extends TFetcherFns<M>>(
 		() =>
 			promiseFns.map((_, index) => async () => {
 				try {
-					const newData = await promiseFns[index]();
+					const newData = await promiseFns[index]!();
 					setState((prevState) => {
 						if (!prevState.data) return prevState;
 						const updatedData = [...prevState.data] as TDataArray<F>;
@@ -148,7 +152,7 @@ export default function anyModal<AnyModals extends { type: string }>(
 		Body: React.FC<{
 			modal: ModalOf<K>;
 			data: TDataArray<F>;
-			update: (() => Promise<void>)[];
+			update: TUpdateFns<F>;
 			updateAll: () => Promise<void>;
 		}>
 	): void;

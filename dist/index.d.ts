@@ -4,6 +4,9 @@ type TFetcherFns<M> = readonly TFetcherFn<M>[];
 type TDataArray<F extends TFetcherFns<any>> = {
     -readonly [I in keyof F]: Awaited<ReturnType<F[I]>>;
 };
+type TUpdateFns<F extends TFetcherFns<any>> = {
+    -readonly [I in keyof F]: () => Promise<void>;
+};
 export default function anyModal<AnyModals extends {
     type: string;
 }>(loaderNode?: (modal: AnyModals) => ReactNode | null, errorNode?: (error: Error) => ReactNode | null): {
@@ -33,7 +36,7 @@ export default function anyModal<AnyModals extends {
                 type: K;
             }>;
             data: TDataArray<F>;
-            update: (() => Promise<void>)[];
+            update: TUpdateFns<F>;
             updateAll: () => Promise<void>;
         }>): void;
     };
